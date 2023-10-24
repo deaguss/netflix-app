@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.example.netflix_app"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.netflix_app"
