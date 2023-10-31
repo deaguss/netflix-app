@@ -21,7 +21,7 @@ class RegisterPage : AppCompatActivity() {
     private fun initComponents(){
         editTextEmail = findViewById(R.id.email)
         editTextPassword = findViewById(R.id.password)
-        signUp = findViewById(R.id.button_sign_in)
+        signUp = findViewById(R.id.button_sign_up)
         signIn = findViewById(R.id.sign_in_text)
     }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,33 +37,29 @@ class RegisterPage : AppCompatActivity() {
         }
 
         signUp.setOnClickListener {
-            val email: String = editTextEmail.text.toString()
-            val password: String = editTextPassword.text.toString()
+            val email = editTextEmail.text.toString().trim()
+            val password = editTextPassword.text.toString().trim()
 
-            if(TextUtils.isEmpty(email)){
-                Toast.makeText(this@RegisterPage, "Enter create your email", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener;
+            if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+                // Memastikan email dan kata sandi tidak kosong
+                Toast.makeText(this@RegisterPage, "Please enter both email and password", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
 
-            if(TextUtils.isEmpty(password)){
-                Toast.makeText(this@RegisterPage, "Enter create your password", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener;
-            }
-
-
-            firebaseAuth.signInWithEmailAndPassword(email, password)
+            firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Toast.makeText(this@RegisterPage, "Created an account successfully", Toast.LENGTH_SHORT).show()
+                        // Autentikasi berhasil
+                        Toast.makeText(this@RegisterPage, "Account created successfully", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this@RegisterPage, MainActivity::class.java)
                         startActivity(intent)
                         finish()
                     } else {
-                        Toast.makeText(this@RegisterPage, "Authentication failed", Toast.LENGTH_SHORT).show()
+                        // Autentikasi gagal
+                        val error = task.exception?.message ?: "Unknown error"
+                        Toast.makeText(this@RegisterPage, "Authentication failed: $error", Toast.LENGTH_SHORT).show()
                     }
-
                 }
-
         }
 
     }

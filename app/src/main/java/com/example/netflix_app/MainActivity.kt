@@ -43,8 +43,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         signIn.setOnClickListener {
-            val email: String = editTextEmail.text.toString()
-            val password: String = editTextPassword.text.toString()
+            val email = editTextEmail.text.toString().trim()
+            val password = editTextPassword.text.toString().trim()
 
             if(TextUtils.isEmpty(email)){
                 Toast.makeText(this@MainActivity, "Enter your email", Toast.LENGTH_SHORT).show()
@@ -65,7 +65,8 @@ class MainActivity : AppCompatActivity() {
                         startActivity(intent)
                         finish()
                     } else {
-                      Toast.makeText(this@MainActivity, "Authentication failed", Toast.LENGTH_SHORT).show()
+                        val error = task.exception?.message ?: "Unknown error"
+                        Toast.makeText(this@MainActivity, "Authentication failed: $error", Toast.LENGTH_SHORT).show()
                     }
 
                 }
